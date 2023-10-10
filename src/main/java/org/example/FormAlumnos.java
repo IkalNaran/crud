@@ -11,7 +11,7 @@ public class FormAlumnos extends JFrame {
     private JLabel titleName;
     private JButton guardarButton;
     private JButton modifcarButton;
-    private JButton eliminarButton1;
+    private JButton eliminarButton;
     private JTextField textId;
     private JTextField textName;
     private JTextField textLastName;
@@ -24,6 +24,8 @@ public class FormAlumnos extends JFrame {
         cConection.estableConexion();*/
 
         Students students = new Students();
+        this.setLocationRelativeTo(null);
+        textId.setEnabled(false);
         students.mostrarAlumnos(mostrarAlumnos);
         setContentPane(MainPanel);
         setTitle("Simple Gui App");
@@ -41,21 +43,29 @@ public class FormAlumnos extends JFrame {
                 students.mostrarAlumnos(mostrarAlumnos);
             }
         });
-        eliminarButton1.addActionListener(new ActionListener() {
+        eliminarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Students students = new Students();
                 students.deleteStudent(textId);
+                students.mostrarAlumnos(mostrarAlumnos);
             }
         });
         mostrarAlumnos.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Students students = new Students();
-                students.deleteStudent(textId);
                 super.mouseClicked(e);
                 students.SelecionarAlumno(mostrarAlumnos,textId,textName,textLastName);
 
+            }
+        });
+        modifcarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Students students = new Students();
+                students.ModificarAlumno(textId,textName,textLastName);
+                students.mostrarAlumnos(mostrarAlumnos);
             }
         });
     }

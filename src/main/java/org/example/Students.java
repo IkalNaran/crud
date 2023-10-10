@@ -8,14 +8,13 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.concurrent.Callable;
 
 public class Students {
     int codigo;
     String nombreAlumno;
     String apellidosAlumnos;
 
-    public int getCodigo(int codigo){
+    public int getCodigo(){
         return codigo;
     }
     public String getApellidosAlumnos() {
@@ -55,15 +54,15 @@ public class Students {
     }
 
     public void deleteStudent(JTextField paramCodigo){
-        getCodigo(Integer.parseInt(paramCodigo.getText()));
-        CConection objConexion = new CConection();
+        setCodigo(Integer.parseInt(paramCodigo.getText()));
+        CConection cConection = new CConection();
         String consulta =("DELETE FROM Students WHERE Students.id=?;");
         try{
-            CallableStatement cs  = objConexion.estableConexion().prepareCall(consulta);
-            cs.setInt(1,codigo);
+            CallableStatement cs  = cConection.estableConexion().prepareCall(consulta);
+            cs.setInt(1,getCodigo());
             cs.execute();
             JOptionPane.showMessageDialog(null, "Se elimino alumno");
-        }catch (Exception e){
+        }catch (SQLException e){
             JOptionPane.showMessageDialog(null, "error" + e);
         }
     }
@@ -111,6 +110,26 @@ public class Students {
             }
         }catch (Exception e){
             JOptionPane.showMessageDialog(null, "Error" + e);
+        }
+    }
+
+    public void ModificarAlumno(JTextField paramCodigo, JTextField paramNombres, JTextField paramApellidos){
+        setCodigo(Integer.parseInt(paramCodigo.getText()));
+        setNombreAlumno(paramNombres.getText());
+        setApellidosAlumnos(paramApellidos.getText());
+
+        CConection conection = new CConection();
+        String consulta = "UPDATE Students SET Students.`FIRST NAME` =?, Students.`LAST NAME` =? WHERE Students.id=?;";
+
+        try {
+            CallableStatement cs = conection.estableConexion().prepareCall(consulta);
+            cs.setString(1,getNombreAlumno());
+            cs.setString(2,getApellidosAlumnos());
+            cs.setInt(3, getCodigo());
+            cs.execute();
+            JOptionPane.showMessageDialog(null,"Modificacion Exitosa");
+        }catch (SQLException e){
+    JOptionPane.showMessageDialog(null,"No se pudo modificar" + e);
         }
     }
 }
